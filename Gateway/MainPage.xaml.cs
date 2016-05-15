@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
+using Windows.Devices.Spi;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +25,29 @@ namespace Gateway
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private const string SPI_CONTROLLER_NAME = "SPI0";
+        private const int SPI_CHIP_SELECT_LINE = 0;
+
+        private SpiDevice iqrf;
+
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private async Task<SpiDevice> InitSPI()
+        {
+            SpiConnectionSettings settings = new SpiConnectionSettings(SPI_CHIP_SELECT_LINE);
+            settings.ClockFrequency = 5000000;
+            settings.Mode = SpiMode.Mode0;
+            string spiAqs = SpiDevice.GetDeviceSelector(SPI_CONTROLLER_NAME);
+            DeviceInformationCollection devicesInfo = await DeviceInformation.FindAllAsync(spiAqs);
+            return await SpiDevice.FromIdAsync(devicesInfo[0].Id, settings);
+        }
+
+        private async void btnInitSPI_Click(object sender, RoutedEventArgs e)
+        {
+            iqrf = await InitSPI();
         }
     }
 }

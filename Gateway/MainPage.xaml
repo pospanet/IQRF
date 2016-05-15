@@ -8,6 +8,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Button x:Name="btnInitSPI" Content="Init SPI" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Click="btnInitSPI_Click"/>
+        <Button x:Name="btnGetTemp" Content="Get Temperature" HorizontalAlignment="Left" Margin="50,100,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>
